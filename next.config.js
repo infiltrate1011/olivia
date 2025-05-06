@@ -3,12 +3,15 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: "/(.*)",
         headers: [
-          { key: 'X-Frame-Options', value: 'ALLOWALL' },
           {
-            key: 'Content-Security-Policy',
-            value: "frame-ancestors 'self' https://fruitstand-skin.myshopify.com",
+            key: "X-Frame-Options",
+            value: "ALLOWALL",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors https://*.myshopify.com https://fruitstand-skin.myshopify.com",
           },
         ],
       },
@@ -16,9 +19,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
-
-module.exports = nextConfig
+module.exports = nextConfig;
