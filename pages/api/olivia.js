@@ -6,7 +6,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST requests allowed" });
   }
@@ -47,13 +47,11 @@ At all times, your mission is to help the user feel beautiful, informed, and emp
     });
 
     const reply = completion.data.choices?.[0]?.message?.content;
-    res.status(200).json({ reply });
+    return res.status(200).json({ reply });
   } catch (error) {
     const errorMessage =
       error?.response?.data?.error?.message || error?.message || "Unknown error";
-    console.error("🔥 OpenAI error:", error);
-    console.log("🔥 OpenAI error (string):", errorMessage);
-
+    console.error("🔥 OpenAI error:", errorMessage);
     return res.status(500).json({ error: "Something went wrong", details: errorMessage });
   }
-};
+}
