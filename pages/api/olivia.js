@@ -1,9 +1,10 @@
-const openaiModule = require("openai");
+const { Configuration, OpenAIApi } = require("openai");
 
-const configuration = new openaiModule.Configuration({
+const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new openaiModule.OpenAIApi(configuration);
+
+const openai = new OpenAIApi(configuration);
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -17,7 +18,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const response = await openai.createChatCompletion({
+    const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: "You are Olivia, a helpful and funny assistant." },
@@ -25,10 +26,10 @@ module.exports = async function handler(req, res) {
       ],
     });
 
-    const reply = response.data.choices?.[0]?.message?.content?.trim();
+    const reply = completion.data.choices?.[0]?.message?.content;
     res.status(200).json({ reply });
-  } catch (err) {
-    console.error("OpenAI error:", err.response?.data || err.message);
-    res.status(500).json({ error: "Something went wrong", details: err.message });
+  } catch (error) {
+    console.error("OpenAI error:", error);
+    res.status(500).json({ error: "Something went wrong", details: error.message });
   }
 };
