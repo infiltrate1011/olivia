@@ -29,7 +29,11 @@ module.exports = async function handler(req, res) {
     const reply = completion.data.choices?.[0]?.message?.content;
     res.status(200).json({ reply });
   } catch (error) {
-    console.error("OpenAI error:", error);
-    res.status(500).json({ error: "Something went wrong", details: error.message });
+    const errorMessage =
+      error?.response?.data?.error?.message || error?.message || "Unknown error";
+    console.error("🔥 OpenAI error:", error);
+    console.log("🔥 OpenAI error (string):", errorMessage);
+
+    return res.status(500).json({ error: "Something went wrong", details: errorMessage });
   }
 };
