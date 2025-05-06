@@ -1,5 +1,8 @@
 import { Configuration, OpenAIApi } from "openai";
 
+// ✅ Debug: Check if environment variable is working
+console.log("ENV CHECK:", process.env.OPENAI_API_KEY ? "Key found" : "Missing key");
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
