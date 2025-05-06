@@ -1,15 +1,11 @@
-const { Configuration, OpenAIApi } = require("openai");
+const openaiModule = require("openai");
 
-const configuration = new Configuration({
+const configuration = new openaiModule.Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-const openai = new OpenAIApi(configuration);
+const openai = new openaiModule.OpenAIApi(configuration);
 
 module.exports = async function handler(req, res) {
-  console.log("ENV check:", !!process.env.OPENAI_API_KEY);
-  console.log("KEY length:", process.env.OPENAI_API_KEY?.length);
-
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST requests allowed" });
   }
@@ -25,8 +21,8 @@ module.exports = async function handler(req, res) {
       model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: "You are Olivia, a helpful and funny assistant." },
-        { role: "user", content: message }
-      ]
+        { role: "user", content: message },
+      ],
     });
 
     const reply = response.data.choices?.[0]?.message?.content?.trim();
