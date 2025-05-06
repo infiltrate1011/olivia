@@ -1,8 +1,15 @@
-const openai = require("openai");
+const { Configuration, OpenAIApi } = require("openai");
 
-openai.apiKey = process.env.OPENAI_API_KEY;
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
 
 module.exports = async function handler(req, res) {
+  console.log("ENV check:", !!process.env.OPENAI_API_KEY);
+  console.log("KEY length:", process.env.OPENAI_API_KEY?.length);
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST requests allowed" });
   }
@@ -14,18 +21,18 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: "You are Olivia, a helpful and funny assistant." },
-        { role: "user", content: message },
-      ],
+        { role: "user", content: message }
+      ]
     });
 
-    const reply = response.choices[0].message.content.trim();
+    const reply = response.data.choices?.[0]?.message?.content?.trim();
     res.status(200).json({ reply });
   } catch (err) {
-    console.error("OpenAI error:", err);
+    console.error("OpenAI error:", err.response?.data || err.message);
     res.status(500).json({ error: "Something went wrong", details: err.message });
   }
 };
