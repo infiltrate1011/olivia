@@ -11,7 +11,7 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors https://*.myshopify.com https://fruitstand-skin.myshopify.com",
+            value: "frame-ancestors https://*.myshopify.com https://myshopify.com;",
           },
         ],
       },
