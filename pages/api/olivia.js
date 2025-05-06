@@ -9,6 +9,8 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 module.exports = async function handler(req, res) {
+  console.log("API key length:", process.env.OPENAI_API_KEY?.length);
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST requests allowed" });
   }
